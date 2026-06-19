@@ -150,12 +150,15 @@ async function startBroadcast() {
     await client.publish([audioTrack, customVideoTrack]);
     // ── End pipeline ───────────────────────────────────────────────────────
 
-    goLiveBtn.classList.add('hidden');
+    document.getElementById('go-live-area')?.classList.add('hidden');
+    document.getElementById('live-area')?.classList.remove('hidden');
+    statusMsg?.classList.add('hidden');
     endBtn.classList.remove('hidden');
     muteBtn.classList.remove('hidden');
     filterWrapper?.classList.remove('hidden');
     liveBadge?.classList.remove('hidden');
     setStatus('You are LIVE');
+
 
     await fetch(`/app/stream/${cfg.streamId}/go-live`, {
         method: 'POST',
@@ -175,16 +178,13 @@ async function endBroadcast() {
     localVideo.innerHTML = '';
     localVideo.style.filter = 'none';
 
+    document.getElementById('live-area')?.classList.add('hidden');
+    document.getElementById('go-live-area')?.classList.remove('hidden');
+    statusMsg?.classList.remove('hidden');
     endBtn.classList.add('hidden');
     muteBtn.classList.add('hidden');
     filterWrapper?.classList.add('hidden');
-    goLiveBtn.classList.remove('hidden');
     liveBadge?.classList.add('hidden');
-
-    filterIndex  = 0;
-    activeFilter = 'none';
-    if (filterLabel) filterLabel.textContent = 'Off';
-
     setStatus('Stream ended.');
 
     await fetch(`/app/stream/${cfg.streamId}/end`, {
