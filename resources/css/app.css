@@ -9,7 +9,7 @@
 }
 
 @theme {
-    /* AURELIAN Color System */
+    /* Maddox Color System */
     --color-primary: #785a00;
     --color-on-primary: #ffffff;
     --color-primary-container: #c8a24a;
@@ -54,7 +54,7 @@
     --color-inverse-surface: #313030;
     --color-inverse-on-surface: #f3f0ef;
 
-    /* AURELIAN Spacing */
+    /* Maddox Spacing */
     --spacing-base: 8px;
     --spacing-gutter: 16px;
     --spacing-stack-sm: 4px;
@@ -62,7 +62,7 @@
     --spacing-container-padding: 24px;
     --spacing-section-gap: 64px;
 
-    /* AURELIAN Font Families */
+    /* Maddox Font Families */
     --font-display-lg: 'Plus Jakarta Sans', sans-serif;
     --font-headline-lg: 'Plus Jakarta Sans', sans-serif;
     --font-headline-lg-mobile: 'Plus Jakarta Sans', sans-serif;
@@ -72,7 +72,7 @@
     --font-label-sm: 'Inter', sans-serif;
 }
 
-/* AURELIAN Typography — size + line-height + weight combined */
+/* Maddox Typography — size + line-height + weight combined */
 @layer utilities {
     .text-display-lg {
         font-size: 48px;
@@ -114,7 +114,7 @@
     }
 }
 
-/* AURELIAN Custom Components */
+/* Maddox Custom Components */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
 }

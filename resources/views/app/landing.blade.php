@@ -138,7 +138,7 @@
         <div class="relative w-full h-48 rounded-2xl overflow-hidden bg-[#1c1b1b] flex items-center gold-shadow">
             <div class="relative z-10 px-8 py-6 w-full md:w-2/3">
                 <span class="font-label-sm text-primary-fixed uppercase tracking-[0.3em] mb-4 block">Membership</span>
-                <h3 class="font-headline-lg text-white mb-2">AURELIAN PRESTIGE</h3>
+                <h3 class="font-headline-lg text-white mb-2">MADDOX PRESTIGE</h3>
                 <p class="text-white/60 font-body-md mb-6 max-w-sm">Early access to limited releases, zero-commission bidding, and private concierge services.</p>
                 <button class="bg-primary text-white font-label-sm uppercase px-8 py-3 rounded-full hover:bg-primary-container transition-all">Upgrade Now</button>
             </div>

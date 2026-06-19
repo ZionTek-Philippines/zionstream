@@ -138,7 +138,7 @@
 
         {{-- App Version --}}
         <p class="text-center text-[10px] text-outline/40 uppercase tracking-widest pt-2">
-            AURELIAN · v1.0.0
+            Maddox · v1.0.0
         </p>
 
     </div>

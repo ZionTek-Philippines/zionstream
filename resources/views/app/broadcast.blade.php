@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Broadcast — {{ $stream->title }}</title>
+    <title>{{ $stream->title }} — Maddox</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
 {{-- Top Bar --}}
 <header class="flex items-center justify-between px-6 h-14 bg-black/80 border-b border-white/10 shrink-0">
     <div class="flex items-center gap-3">
-        <span class="font-display-lg text-primary text-label-sm tracking-[0.2em] uppercase">AURELIAN</span>
+        <span class="font-display-lg text-primary text-label-sm tracking-[0.2em] uppercase">Maddox</span>
         <span class="text-white/40">·</span>
         <span class="text-white/70 text-sm truncate max-w-xs">{{ $stream->title }}</span>
     </div>

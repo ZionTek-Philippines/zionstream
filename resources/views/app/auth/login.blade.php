@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Sign In — AURELIAN</title>
+    <title>Sign In — Maddox</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@
         {{-- Brand --}}
         <header class="flex flex-col items-center text-center">
             <h1 class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-[0.2em] uppercase mb-4">
-                AURELIAN
+                MADDOX
             </h1>
             <div class="w-8 h-[1px] bg-primary-container mb-12"></div>
             <h2 class="text-[28px] font-light tracking-tight text-on-surface mb-2">
