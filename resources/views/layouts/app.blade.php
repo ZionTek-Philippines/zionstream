@@ -45,7 +45,6 @@
                 @if(auth()->user()->hasRole('streamer'))
                     @php
                         $myStream = auth()->user()->channel?->streams()
-                            ->whereIn('status', ['live', 'scheduled'])
                             ->latest()
                             ->first();
                     @endphp

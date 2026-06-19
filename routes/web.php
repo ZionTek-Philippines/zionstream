@@ -191,30 +191,30 @@ Route::get('/database/testdata', function () {
     abort_unless(app()->isLocal(), 403);
 
     $streamer = User::firstOrCreate(
-        ['email' => 'elias@aurelian.test'],
-        ['name' => 'Elias Thorne', 'password' => Hash::make('password'), 'email_verified_at' => now()]
+        ['email' => 'cha@maddoxjewelry.com'],
+        ['name' => 'Cha', 'password' => Hash::make('L3t$go2027'), 'email_verified_at' => now()]
     );
     $streamer->syncRoles(['streamer']);
 
     $customer = User::firstOrCreate(
-        ['email' => 'customer@aurelian.test'],
-        ['name' => 'Julianna Thorne', 'password' => Hash::make('password'), 'email_verified_at' => now()]
+        ['email' => 'customer@maddoxjewelry.com'],
+        ['name' => 'Julianna Thorne', 'password' => Hash::make('M@ddox2027'), 'email_verified_at' => now()]
     );
     $customer->syncRoles(['customer']);
 
     $channel = Channel::firstOrCreate(
-        ['slug' => 'elias-thorne-gems'],
-        ['user_id' => $streamer->id, 'name' => 'Elias Thorne Gems', 'description' => 'Master Gemologist — rare diamonds and luxury pieces.', 'is_active' => true]
+        ['slug' => 'cha-maddox'],
+        ['user_id' => $streamer->id, 'name' => 'Cha Maddox', 'description' => 'Master Gemologist — rare diamonds and luxury pieces.', 'is_active' => true]
     );
 
     $stream = Stream::firstOrCreate(
-        ['agora_channel_name' => 'aurelian-live-001'],
-        ['channel_id' => $channel->id, 'title' => 'AURELIAN Diamond Solitaire — Live Auction', 'description' => 'Exclusive live auction of our most coveted diamond collection.', 'status' => 'live', 'started_at' => now(), 'peak_viewer_count' => 1247]
+        ['agora_channel_name' => 'maddox-live-001'],
+        ['channel_id' => $channel->id, 'title' => 'MADDOX Diamond — Live Auction', 'description' => 'Exclusive live auction of our most coveted diamond collection.', 'status' => 'live', 'started_at' => now(), 'peak_viewer_count' => 1247]
     );
 
     $diamond = Product::firstOrCreate(
         ['sku' => 'AUR-DS-001'],
-        ['name' => 'AURELIAN Diamond Solitaire Ring', 'slug' => 'aurelian-diamond-solitaire-ring', 'description' => '2.1ct VS1 Brilliant Cut Diamond, 18k Yellow Gold Setting.', 'price' => 124990.00, 'stock_quantity' => 1, 'is_active' => true]
+        ['name' => 'MADDOX Diamond Ring', 'slug' => 'maddox-diamond-ring', 'description' => '2.1ct VS1 Brilliant Cut Diamond, 18k Yellow Gold Setting.', 'price' => 124990.00, 'stock_quantity' => 1, 'is_active' => true]
     );
 
     $bracelet = Product::firstOrCreate(
@@ -231,8 +231,8 @@ Route::get('/database/testdata', function () {
         'status'  => 'success',
         'message' => 'Demo data ready.',
         'users'   => [
-            'streamer' => ['email' => $streamer->email, 'password' => 'password', 'role' => 'streamer'],
-            'customer' => ['email' => $customer->email, 'password' => 'password', 'role' => 'customer'],
+            'streamer' => ['email' => $streamer->email, 'password' => 'P@s$2026007', 'role' => 'streamer'],
+            'customer' => ['email' => $customer->email, 'password' => 'M@ddox2027', 'role' => 'customer'],
         ],
         'urls' => [
             'landing'          => url('/'),
