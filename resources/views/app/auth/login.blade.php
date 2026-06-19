@@ -80,7 +80,7 @@
                         </label>
                         <input class="input-line px-1 py-3 text-on-surface text-[16px] {{ $errors->has('email') ? 'is-invalid' : '' }}"
                                id="email" name="email" type="email"
-                               placeholder="alexander@prestige.com"
+                               placeholder="alexis@maddoxjewelry.com"
                                value="{{ old('email') }}" required autofocus>
                         @error('email')
                             <p class="text-error text-[11px] mt-2 px-1">{{ $message }}</p>
