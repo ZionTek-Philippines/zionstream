@@ -54,12 +54,18 @@
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">videocam</span>
                     </a>
                 @else
-                    <a href="{{ route('app.landing') }}"
+                    @php
+                        $liveStream = \App\Models\Stream::where('status', 'live')
+                            ->latest('started_at')
+                            ->first();
+                    @endphp
+                    <a href="{{ $liveStream ? route('app.stream', $liveStream) : route('app.landing') }}"
                     class="scale-125 bg-primary text-on-primary rounded-full -translate-y-4 shadow-lg p-4 animate-pulse-gold flex items-center justify-center transition-transform active:scale-95"
                     title="Watch Live">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">live_tv</span>
                     </a>
                 @endif
+
             @else
                 <a href="{{ route('app.auth.login') }}"
                 class="scale-125 bg-primary text-on-primary rounded-full -translate-y-4 shadow-lg p-4 animate-pulse-gold flex items-center justify-center transition-transform active:scale-95">
