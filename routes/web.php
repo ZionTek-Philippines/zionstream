@@ -130,6 +130,8 @@ Route::middleware('auth')->group(function () {
 
         return response()->json(compact('token'));
     });
+
+    Route::get('/app/settings', fn() => view('app.settings'))->name('app.settings');
 });
 
 
