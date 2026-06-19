@@ -53,13 +53,10 @@
             <h2 class="text-[28px] font-light tracking-tight text-on-surface mb-2">
                 Welcome Back
             </h2>
-            <p class="text-on-surface-variant/80 text-[15px] max-w-[280px] leading-relaxed">
-                @if($role === 'streamer')
-                    Sign in to manage your live stream.
-                @else
-                    Sign in to continue your private viewing experience.
-                @endif
+            <p class="text-on-surface-variant/80 text-[15px] max-w-[280px] text-center leading-relaxed">
+                Sign in to continue your experience.
             </p>
+
         </header>
 
         {{-- Session Error --}}
@@ -71,9 +68,7 @@
 
         {{-- Form --}}
         <section class="flex flex-col gap-8">
-            <form method="POST"
-                  action="{{ $role === 'streamer' ? route('app.auth.streamer.post') : route('app.auth.customer.post') }}"
-                  class="flex flex-col gap-10">
+            <form method="POST" action="{{ route('app.auth.post') }}" class="flex flex-col gap-10">
                 @csrf
 
                 <div class="space-y-8">
@@ -124,53 +119,34 @@
                 </button>
             </form>
 
-            @if($role !== 'streamer')
-                <div class="flex items-center gap-4">
-                    <div class="h-[0.5px] flex-1 bg-outline-variant/30"></div>
-                    <span class="text-[10px] text-outline/50 uppercase tracking-widest">Or authenticate via</span>
-                    <div class="h-[0.5px] flex-1 bg-outline-variant/30"></div>
-                </div>
+            {{-- Divider --}}
+            <div class="flex items-center gap-4">
+                <div class="h-[0.5px] flex-1 bg-outline-variant/30"></div>
+                <span class="text-[10px] text-outline/50 uppercase tracking-widest">Or authenticate via</span>
+                <div class="h-[0.5px] flex-1 bg-outline-variant/30"></div>
+            </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="{{ route('app.auth.facebook') }}"
-                        class="flex items-center justify-center gap-3 py-4 rounded-lg border border-[#1877F2]/30 bg-white hover:bg-[#1877F2]/5 hover:border-[#1877F2]/60 transition-all duration-200 group">
-                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="#1877F2">
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                            <span class="text-[12px] text-[#1877F2] uppercase tracking-[0.15em] font-medium group-hover:font-semibold transition-all">
-                                Continue with Facebook
-                            </span>
-                        </a>
+            {{-- Facebook --}}
+            <a href="{{ route('app.auth.facebook') }}"
+            class="flex items-center justify-center gap-3 py-4 rounded-lg border border-[#1877F2]/30 bg-white hover:bg-[#1877F2]/5 hover:border-[#1877F2]/60 transition-all duration-200 group">
+                <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="#1877F2">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <span class="text-[12px] text-[#1877F2] uppercase tracking-[0.15em] font-medium group-hover:font-semibold transition-all">
+                    Continue with Facebook
+                </span>
+            </a>
 
-                    {{-- <button class="flex items-center justify-center gap-3 py-4 rounded-lg border-[0.5px] border-outline-variant/50 bg-white hover:bg-surface-container-low transition-colors opacity-40 cursor-not-allowed"
-                            type="button" disabled title="Coming soon">
-                        <span class="material-symbols-outlined text-[18px] text-on-surface-variant">language</span>
-                        <span class="text-[11px] text-on-surface-variant uppercase tracking-widest">Google</span>
-                    </button>
-                    <button class="flex items-center justify-center gap-3 py-4 rounded-lg border-[0.5px] border-outline-variant/50 bg-white hover:bg-surface-container-low transition-colors opacity-40 cursor-not-allowed"
-                            type="button" disabled title="Coming soon">
-                        <span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone_iphone</span>
-                        <span class="text-[11px] text-on-surface-variant uppercase tracking-widest">Apple</span>
-                    </button> --}}
-                </div>
-            @endif
         </section>
 
         {{-- Footer --}}
         <footer class="flex flex-col items-center gap-6">
-            @if($role === 'streamer')
-                <p class="text-on-surface-variant text-sm text-center">
-                    Streamer accounts are managed by an admin.
-                </p>
-            @else
-                <p class="text-on-surface-variant text-sm">
-                    Don't have an account?
-                    <a class="text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4 ml-1" href="#">
-                        Register Now
-                    </a>
-                </p>
-            @endif
-
+            <p class="text-on-surface-variant text-sm">
+                Don't have an account?
+                <a class="text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4 ml-1" href="#">
+                    Register Now
+                </a>
+            </p>
             <div class="flex items-center gap-4 opacity-40">
                 <a class="text-[10px] uppercase tracking-widest hover:opacity-100 transition-opacity" href="#">Privacy</a>
                 <span class="text-[8px] text-outline">•</span>
@@ -179,6 +155,7 @@
                 <a class="text-[10px] uppercase tracking-widest hover:opacity-100 transition-opacity" href="#">Support</a>
             </div>
         </footer>
+
 
     </div>
 </main>

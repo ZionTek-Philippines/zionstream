@@ -13,14 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->redirectGuestsTo(function (Request $request) {
-            if (str_starts_with($request->path(), 'app/broadcast')) {
-                return route('app.auth.streamer.login');
-            }
-
-            return route('app.auth.login');
-        });
+        $middleware->redirectGuestsTo(fn() => route('app.auth.login'));
     })
+
 
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

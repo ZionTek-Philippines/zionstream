@@ -17,7 +17,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 // ─── Guest Auth ───────────────────────────────────────────────────────────────
 
-Route::get('/app/auth', fn() => view('app.auth.login', ['role' => 'customer']))->name('app.auth.login');
+Route::get('/app/auth', fn() => view('app.auth.login'))->name('app.auth.login');
 
 Route::post('/app/auth', function (Request $request) {
     $credentials = $request->validate([
@@ -27,48 +27,47 @@ Route::post('/app/auth', function (Request $request) {
 
     if (Auth::attempt($credentials, $request->boolean('remember'))) {
         $request->session()->regenerate();
-        return redirect()->intended(route('app.landing'));
+        return redirect()->intended(route('app.landing'))->with('login_role', Auth::user()->getRoleNames()->first());
     }
 
     return back()
         ->withErrors(['email' => 'These credentials do not match our records.'])
         ->onlyInput('email');
-})->name('app.auth.customer.post');
+})->name('app.auth.post');
 
-Route::get('/app/auth/streamer', fn() => view('app.auth.login', ['role' => 'streamer']))->name('app.auth.streamer.login');
+Route::get('/app/auth/facebook', function () {
+    return Socialite::driver('facebook')->redirect();
+})->name('app.auth.facebook');
 
-Route::post('/app/auth/streamer', function (Request $request) {
-    $credentials = $request->validate([
-        'email'    => ['required', 'email'],
-        'password' => ['required'],
-    ]);
+Route::get('/app/auth/facebook/callback', function () {
+    try {
+        $fbUser = Socialite::driver('facebook')->user();
+    } catch (\Exception $e) {
+        return redirect()->route('app.auth.login')
+            ->with('error', 'Facebook login failed. Please try again.');
+    }
 
-    if (Auth::attempt($credentials, $request->boolean('remember'))) {
-        $user = Auth::user();
+    $user = User::where('facebook_id', $fbUser->getId())->first()
+        ?? User::where('email', $fbUser->getEmail())->first();
 
-        if (! $user->hasRole('streamer')) {
-            Auth::logout();
-            return back()
-                ->with('error', 'This portal is for streamers only.')
-                ->onlyInput('email');
+    if ($user) {
+        if (! $user->facebook_id) {
+            $user->update(['facebook_id' => $fbUser->getId(), 'avatar' => $fbUser->getAvatar()]);
         }
-
-        $request->session()->regenerate();
-
-        $stream = Stream::whereHas('channel', fn($q) => $q->where('user_id', $user->id))
-            ->whereIn('status', ['live', 'scheduled'])
-            ->latest()
-            ->first();
-
-        return $stream
-            ? redirect()->route('app.broadcast', $stream)
-            : redirect()->route('app.landing');
+    } else {
+        $user = User::create([
+            'name'              => $fbUser->getName(),
+            'email'             => $fbUser->getEmail(),
+            'facebook_id'       => $fbUser->getId(),
+            'avatar'            => $fbUser->getAvatar(),
+            'email_verified_at' => now(),
+        ]);
+        $user->assignRole('customer');
     }
 
-    return back()
-        ->withErrors(['email' => 'These credentials do not match our records.'])
-        ->onlyInput('email');
-})->name('app.auth.streamer.post');
+    Auth::login($user, remember: true);
+    return redirect()->intended(route('app.landing'));
+})->name('app.auth.facebook.callback');
 
 Route::post('/app/auth/logout', function (Request $request) {
     Auth::logout();
@@ -76,6 +75,7 @@ Route::post('/app/auth/logout', function (Request $request) {
     $request->session()->regenerateToken();
     return redirect()->route('app.auth.login');
 })->name('app.auth.logout')->middleware('auth');
+
 
 // ─── Public Routes ────────────────────────────────────────────────────────────
 Route::get('/', function () {
@@ -132,43 +132,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/app/auth/facebook', function () {
-    return Socialite::driver('facebook')->redirect();
-})->name('app.auth.facebook');
 
-Route::get('/app/auth/facebook/callback', function () {
-    try {
-        $fbUser = Socialite::driver('facebook')->user();
-    } catch (\Exception $e) {
-        return redirect()->route('app.auth.login')
-            ->with('error', 'Facebook login failed. Please try again.');
-    }
-
-    $user = User::where('facebook_id', $fbUser->getId())->first()
-        ?? User::where('email', $fbUser->getEmail())->first();
-
-    if ($user) {
-        if (! $user->facebook_id) {
-            $user->update([
-                'facebook_id' => $fbUser->getId(),
-                'avatar'      => $fbUser->getAvatar(),
-            ]);
-        }
-    } else {
-        $user = User::create([
-            'name'              => $fbUser->getName(),
-            'email'             => $fbUser->getEmail(),
-            'facebook_id'       => $fbUser->getId(),
-            'avatar'            => $fbUser->getAvatar(),
-            'email_verified_at' => now(),
-        ]);
-        $user->assignRole('customer');
-    }
-
-    Auth::login($user, remember: true);
-
-    return redirect()->intended(route('app.landing'));
-})->name('app.auth.facebook.callback');
 
 
 
