@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('product_claims', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('stream_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('stream_product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('chat_message_id')->nullable()->constrained('stream_chat_messages')->nullOnDelete();
+            $table->unsignedInteger('quantity')->default(1);
+            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            $table->text('notes')->nullable();
+            $table->timestamps();
+
+            $table->index(['stream_id', 'status']);
+            $table->index(['stream_product_id', 'status']);
+            $table->index(['user_id', 'status']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('product_claims');
+    }
+};
