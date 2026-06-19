@@ -4,38 +4,34 @@ const APP_ID = import.meta.env.VITE_AGORA_APP_ID;
 const cfg    = window.AgoraBroadcastConfig ?? {};
 
 const FILTERS = {
-    off: {
-        label:  'Off',
-        css:    'none',
+    normal: {
+        label:  'Normal',
+        css:    'saturate(1) contrast(1) brightness(1)',
         beauty: null,
     },
     vibrant: {
         label:  'Vibrant',
-        css:    'saturate(1.9) contrast(1.1)',
-        beauty: { smoothnessLevel: 10, sharpnessLevel: 70, lighteningLevel: 20, lighteningContrastLevel: 1, rednessLevel: 0 },
+        css:    'saturate(1.35) contrast(1.15) brightness(1.05)',
+        beauty: null,
     },
-    warm: {
-        label:  'Warm',
-        css:    'saturate(1.5) sepia(0.2)',
-        beauty: { smoothnessLevel: 20, sharpnessLevel: 50, lighteningLevel: 30, lighteningContrastLevel: 1, rednessLevel: 20 },
+    beauty: {
+        label:  'Beauty',
+        css:    'saturate(1.2) contrast(1.1) brightness(1.1) blur(0.3px)',
+        beauty: null,
     },
-    glamour: {
-        label:  'Glamour',
-        css:    'saturate(1.6) brightness(1.1)',
-        beauty: { smoothnessLevel: 30, sharpnessLevel: 80, lighteningLevel: 40, lighteningContrastLevel: 2, rednessLevel: 10 },
-    },
-    cool: {
-        label:  'Cool',
-        css:    'saturate(1.4) hue-rotate(18deg)',
-        beauty: { smoothnessLevel: 10, sharpnessLevel: 60, lighteningLevel: 15, lighteningContrastLevel: 0, rednessLevel: 0 },
+    professional: {
+        label:  'Pro',
+        css:    'saturate(1.15) contrast(1.2) brightness(1.02)',
+        beauty: null,
     },
 };
+
 
 const FILTER_KEYS = Object.keys(FILTERS);
 
 let client, audioTrack, rawVideoTrack, customVideoTrack, feedVideo;
 let filterIndex  = 0;
-let activeFilter = 'none';
+let activeFilter = 'saturate(1) contrast(1) brightness(1)';
 let drawActive   = false;
 
 const goLiveBtn     = document.getElementById('go-live-btn');
