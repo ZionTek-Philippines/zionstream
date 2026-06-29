@@ -14,7 +14,7 @@ const FILTERS = {
     },
     beauty: {
         label: 'Beauty',
-        css:   'saturate(1.2) contrast(1.1) brightness(1.1) blur(0.3px)',
+        css:   'saturate(1.2) contrast(1.12) brightness(1.18) blur(0.3px)',
     },
     professional: {
         label: 'Pro',
@@ -25,9 +25,12 @@ const FILTERS = {
 const FILTER_KEYS = Object.keys(FILTERS);
 
 let client, audioTrack, rawVideoTrack, customVideoTrack, feedVideo;
-let filterIndex  = 0;
-let activeFilter = 'saturate(1) contrast(1) brightness(1)';
-let drawActive   = false;
+let filterIndex       = 0;
+let activeFilterKey   = 'normal';
+let activeFilter      = FILTERS.normal.css;
+let drawActive        = false;
+let wakeLockSentinel  = null;
+let brightnessOverlay = null;
 
 console.log('[broadcaster] ✅ JS loaded — filters:', Object.keys(FILTERS));
 
@@ -45,18 +48,87 @@ endBtn?.addEventListener('click', endBroadcast);
 muteBtn?.addEventListener('click', toggleMute);
 filterBtn?.addEventListener('click', cycleFilter);
 
-function cycleFilter() {
-    filterIndex  = (filterIndex + 1) % FILTER_KEYS.length;
-    const key    = FILTER_KEYS[filterIndex];
-    const preset = FILTERS[key];
-    activeFilter = preset.css;
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && activeFilterKey === 'beauty') {
+        void requestScreenWakeLock();
+    }
+});
 
-    console.log('[filter] cycled to:', key, '→', activeFilter);
+function ensureBrightnessOverlay() {
+    if (brightnessOverlay) {
+        return brightnessOverlay;
+    }
+
+    brightnessOverlay = document.createElement('div');
+    brightnessOverlay.id = 'beauty-brightness-overlay';
+    brightnessOverlay.style.position = 'fixed';
+    brightnessOverlay.style.inset = '0';
+    brightnessOverlay.style.pointerEvents = 'none';
+    brightnessOverlay.style.zIndex = '5';
+    brightnessOverlay.style.background = '#ffffff';
+    brightnessOverlay.style.opacity = '0';
+    brightnessOverlay.style.transition = 'opacity 180ms ease';
+    document.body.appendChild(brightnessOverlay);
+
+    return brightnessOverlay;
+}
+
+async function requestScreenWakeLock() {
+    if (!('wakeLock' in navigator) || wakeLockSentinel) {
+        return;
+    }
+
+    try {
+        wakeLockSentinel = await navigator.wakeLock.request('screen');
+        wakeLockSentinel.addEventListener('release', () => {
+            wakeLockSentinel = null;
+        });
+    } catch (error) {
+        console.warn('[beauty] wake lock unavailable:', error);
+    }
+}
+
+async function releaseScreenWakeLock() {
+    if (!wakeLockSentinel) {
+        return;
+    }
+
+    try {
+        await wakeLockSentinel.release();
+    } catch (error) {
+        console.warn('[beauty] wake lock release failed:', error);
+    } finally {
+        wakeLockSentinel = null;
+    }
+}
+
+function applyBeautyModeEffects(filterKey) {
+    const overlay = ensureBrightnessOverlay();
+    const isBeautyMode = filterKey === 'beauty';
+
+    overlay.style.opacity = isBeautyMode ? '0.08' : '0';
+
+    if (isBeautyMode) {
+        void requestScreenWakeLock();
+        return;
+    }
+
+    void releaseScreenWakeLock();
+}
+
+function cycleFilter() {
+    filterIndex       = (filterIndex + 1) % FILTER_KEYS.length;
+    activeFilterKey   = FILTER_KEYS[filterIndex];
+    const preset      = FILTERS[activeFilterKey];
+    activeFilter      = preset.css;
+
+    console.log('[filter] cycled to:', activeFilterKey, '→', activeFilter);
 
     document.getElementById('local-video').style.filter = activeFilter;
+    applyBeautyModeEffects(activeFilterKey);
 
     if (filterLabel) filterLabel.textContent = preset.label;
-    const isOn = key !== 'normal';
+    const isOn = activeFilterKey !== 'normal';
     filterBtn?.classList.toggle('text-primary', isOn);
     filterBtn?.classList.toggle('bg-primary/20', isOn);
     filterBtn?.classList.toggle('text-white/60', !isOn);
@@ -142,6 +214,7 @@ async function startBroadcast() {
 
     rawVideoTrack.play('local-video');
     document.getElementById('local-video').style.filter = activeFilter;
+    applyBeautyModeEffects(activeFilterKey);
 
     await client.publish([audioTrack, customVideoTrack]);
     console.log('[agora] published successfully');
@@ -164,6 +237,7 @@ async function startBroadcast() {
 
 async function endBroadcast() {
     drawActive = false;
+    await releaseScreenWakeLock();
     rawVideoTrack?.close();
     customVideoTrack?.close();
     audioTrack?.close();
@@ -182,8 +256,10 @@ async function endBroadcast() {
     filterWrapper?.classList.add('hidden');
     liveBadge?.classList.add('hidden');
 
-    filterIndex  = 0;
-    activeFilter = 'saturate(1) contrast(1) brightness(1)';
+    filterIndex     = 0;
+    activeFilterKey = 'normal';
+    activeFilter    = FILTERS.normal.css;
+    applyBeautyModeEffects(activeFilterKey);
     if (filterLabel) filterLabel.textContent = 'Normal';
 
     setStatus('Stream ended.');
