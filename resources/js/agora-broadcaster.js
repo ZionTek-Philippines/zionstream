@@ -8,18 +8,18 @@ const FILTERS = {
         label: 'Normal',
         css:   'saturate(1) contrast(1) brightness(1)',
     },
-    vibrant: {
-        label: 'Vibrant',
-        css:   'saturate(1.35) contrast(1.15) brightness(1.05)',
-    },
+    // vibrant: {
+    //     label: 'Vibrant',
+    //     css:   'saturate(1.35) contrast(1.15) brightness(1.05)',
+    // },
     beauty: {
         label: 'Beauty',
         css:   'saturate(1.22) contrast(1.12) brightness(1.28) blur(0.3px)',
     },
-    professional: {
-        label: 'Pro',
-        css:   'saturate(1.15) contrast(1.2) brightness(1.02)',
-    },
+    // professional: {
+    //     label: 'Pro',
+    //     css:   'saturate(1.15) contrast(1.2) brightness(1.02)',
+    // },
 };
 
 const FILTER_KEYS = Object.keys(FILTERS);
