@@ -28,6 +28,7 @@ let client, audioTrack, rawVideoTrack, customVideoTrack, feedVideo;
 let filterIndex       = 0;
 let activeFilterKey   = 'normal';
 let activeFilter      = FILTERS.normal.css;
+let activeGlowOpacity = 0;
 let drawActive        = false;
 let wakeLockSentinel  = null;
 let brightnessOverlay = null;
@@ -106,6 +107,7 @@ function applyBeautyModeEffects(filterKey) {
     const overlay = ensureBrightnessOverlay();
     const isBeautyMode = filterKey === 'beauty';
 
+    activeGlowOpacity = isBeautyMode ? 0.08 : 0;
     overlay.style.opacity = isBeautyMode ? '0.08' : '0';
 
     if (isBeautyMode) {
@@ -196,6 +198,11 @@ async function startBroadcast() {
         }
         ctx.filter = activeFilter;
         ctx.drawImage(feedVideo, 0, 0, canvas.width, canvas.height);
+        if (activeGlowOpacity > 0) {
+            ctx.filter = 'none';
+            ctx.fillStyle = `rgba(255, 255, 255, ${activeGlowOpacity})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
         frameCount++;
         if (frameCount % 60 === 0) {
             console.log('[canvas] frame', frameCount, '— filter:', ctx.filter);
