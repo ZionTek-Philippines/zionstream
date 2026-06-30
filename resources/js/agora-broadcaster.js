@@ -14,7 +14,7 @@ const FILTERS = {
     },
     beauty: {
         label: 'Beauty',
-        css:   'saturate(1.2) contrast(1.12) brightness(1.18) blur(0.3px)',
+        css:   'saturate(1.22) contrast(1.12) brightness(1.28) blur(0.3px)',
     },
     professional: {
         label: 'Pro',
@@ -29,6 +29,7 @@ let filterIndex       = 0;
 let activeFilterKey   = 'normal';
 let activeFilter      = FILTERS.normal.css;
 let activeGlowOpacity = 0;
+let activeScreenBlendOpacity = 0;
 let drawActive        = false;
 let wakeLockSentinel  = null;
 let brightnessOverlay = null;
@@ -107,7 +108,8 @@ function applyBeautyModeEffects(filterKey) {
     const overlay = ensureBrightnessOverlay();
     const isBeautyMode = filterKey === 'beauty';
 
-    activeGlowOpacity = isBeautyMode ? 0.08 : 0;
+    activeGlowOpacity = isBeautyMode ? 0.18 : 0;
+    activeScreenBlendOpacity = isBeautyMode ? 0.12 : 0;
     overlay.style.opacity = isBeautyMode ? '0.08' : '0';
 
     if (isBeautyMode) {
@@ -200,8 +202,15 @@ async function startBroadcast() {
         ctx.drawImage(feedVideo, 0, 0, canvas.width, canvas.height);
         if (activeGlowOpacity > 0) {
             ctx.filter = 'none';
+            ctx.globalCompositeOperation = 'screen';
             ctx.fillStyle = `rgba(255, 255, 255, ${activeGlowOpacity})`;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (activeScreenBlendOpacity > 0) {
+                ctx.globalCompositeOperation = 'soft-light';
+                ctx.fillStyle = `rgba(255, 240, 235, ${activeScreenBlendOpacity})`;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            ctx.globalCompositeOperation = 'source-over';
         }
         frameCount++;
         if (frameCount % 60 === 0) {
