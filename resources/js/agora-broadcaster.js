@@ -43,6 +43,7 @@ const filterWrapper = document.getElementById('filter-wrapper');
 const filterBtn     = document.getElementById('filter-btn');
 const filterLabel   = document.getElementById('filter-label');
 const liveBadge     = document.getElementById('live-badge');
+const streamerBadge = document.getElementById('streamer-badge');
 const statusMsg     = document.getElementById('status-msg');
 
 goLiveBtn?.addEventListener('click', startBroadcast);
@@ -243,6 +244,7 @@ async function startBroadcast() {
     muteBtn.classList.remove('hidden');
     filterWrapper?.classList.remove('hidden');
     liveBadge?.classList.remove('hidden');
+    streamerBadge?.classList.add('hidden');
     setStatus('You are LIVE');
 
     await fetch(`/app/stream/${cfg.streamId}/go-live`, {
@@ -271,6 +273,7 @@ async function endBroadcast() {
     muteBtn.classList.add('hidden');
     filterWrapper?.classList.add('hidden');
     liveBadge?.classList.add('hidden');
+    streamerBadge?.classList.remove('hidden');
 
     filterIndex     = 0;
     activeFilterKey = 'normal';

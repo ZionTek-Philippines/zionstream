@@ -56,25 +56,25 @@
         </div>
     </div>
 
-    <div class="flex items-center gap-2">
-        {{-- Always-visible streamer badge --}}
-        <div class="bg-primary/20 border border-primary/40 px-3 py-1 rounded-full flex items-center gap-1.5">
+    <div class="flex items-center gap-1.5 flex-wrap justify-end max-w-[55%] sm:max-w-none">
+        {{-- Streamer badge — hidden once live to save space --}}
+        <div id="streamer-badge" class="bg-primary/20 border border-primary/40 px-2.5 py-1 rounded-full flex items-center gap-1.5 shrink-0">
             <span class="material-symbols-outlined text-primary text-[12px]" style="font-variation-settings: 'FILL' 1;">videocam</span>
-            <span class="text-primary text-[10px] font-bold uppercase tracking-widest">Streamer View</span>
+            <span class="text-primary text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Streamer View</span>
         </div>
         {{-- LIVE badge --}}
-        <div id="live-badge" class="hidden bg-error px-3 py-1 rounded-full flex items-center gap-2 pulse-live">
+        <div id="live-badge" class="hidden bg-error px-2.5 py-1 rounded-full flex items-center gap-1.5 pulse-live shrink-0">
             <span class="w-2 h-2 bg-white rounded-full"></span>
             <span class="text-white text-[10px] font-bold uppercase tracking-widest">LIVE</span>
         </div>
         {{-- End Stream — shown when live --}}
         <button id="end-btn"
-                class="hidden bg-error/90 hover:bg-error text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all active:scale-95">
+                class="hidden bg-error/90 hover:bg-error text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 transition-all active:scale-95 shrink-0 whitespace-nowrap">
             <span class="material-symbols-outlined text-[14px]">stop_circle</span>
             End
         </button>
         {{-- Status — shown when not live --}}
-        <span id="status-msg" class="text-white/50 text-xs">Ready to broadcast</span>
+        <span id="status-msg" class="text-white/50 text-xs shrink-0">Ready to broadcast</span>
     </div>
 </header>
 
