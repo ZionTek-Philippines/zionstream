@@ -166,7 +166,7 @@
             </div>
             <button class="bg-primary hover:bg-primary-container text-white px-5 py-3 rounded-full font-label-sm text-[10px] tracking-widest uppercase transition-colors shadow-lg active:scale-95 duration-200"
                     id="claim-btn">
-                CLAIM
+                {{ strtoupper($claimKeyword) }}
             </button>
         </div>
     @endif
